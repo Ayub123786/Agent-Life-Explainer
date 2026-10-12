@@ -504,14 +504,38 @@ function Platform() {
           </div>
           <div
             key={`m-${tab}-${item}`}
-            className="up min-w-0 flex-[2_1_460px] rounded-[18px] border border-border bg-card p-2.5"
+            className="up min-w-0 flex-[2_1_460px] rounded-[18px] border border-border bg-card p-2.5 shadow-[var(--shadow-frame)]"
           >
-            <div className="flex h-full min-h-80 flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-primary-line bg-primary-soft p-6 text-center">
-              <span className="label-caps text-xs text-primary">Video / GIF</span>
-              <span className="text-xl font-bold">{active.t}</span>
-              <span className="max-w-[340px] text-[13px] text-muted-foreground">
-                {active.media}
-              </span>
+            <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[14px] bg-[#f8fafc]">
+              {active.video ? (
+                <video
+                  key={active.video}
+                  src={active.video}
+                  poster={active.image}
+                  aria-label={`${active.t} in AgenticPM`}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  controls
+                  preload="metadata"
+                  className="h-full w-full object-cover object-top"
+                />
+              ) : active.image ? (
+                <img
+                  src={active.image}
+                  alt={active.t}
+                  className="h-full w-full object-cover object-top"
+                />
+              ) : (
+                <div className="flex h-full min-h-80 flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-primary-line bg-primary-soft p-6 text-center">
+                  <span className="label-caps text-xs text-primary">Video / GIF</span>
+                  <span className="text-xl font-bold">{active.t}</span>
+                  <span className="max-w-[340px] text-[13px] text-muted-foreground">
+                    {active.media}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
           <div

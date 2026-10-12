@@ -1,6 +1,13 @@
 // Page copy for the AgenticPM explainer.
 type Step = { n: string; t: string; d: string };
-type Item = { t: string; d: string; media: string; bullets: string[] };
+type Item = {
+  t: string;
+  d: string;
+  media: string;
+  bullets: string[];
+  video?: string;
+  image?: string;
+};
 const S = (n: string, t: string, d: string): Step => ({ n, t, d });
 export const TEAMS = [
   {
@@ -47,12 +54,22 @@ export const TEAMS = [
   },
 ];
 
-const I = (t: string, d: string, media: string, bullets: string[]): Item => ({
+const I = (
+  t: string,
+  d: string,
+  media: string,
+  bullets: string[],
+  video?: string,
+  image?: string,
+): Item => ({
   t,
   d,
   media,
   bullets,
+  video,
+  image,
 });
+
 export const CFG = [
   {
     name: "Powering Your Workflow, End to End",
@@ -60,137 +77,221 @@ export const CFG = [
       I(
         "Secure Deal Workspace",
         "Stand up a controlled deal environment in under a minute.",
-        "secure-deal-workspace.mp4 (from the AgenticPM site)",
+        "secure-deal-workspace.mp4",
         [
           "Separate workstreams with project-level structure",
           "Create each project with parameters that make it easy to identify",
           "Add team members with the right permissions to confidential materials",
           "One shared space where the whole deal team collaborates",
         ],
+        "/videos/features/powering-your-workflow/secure-deal-workspace.mp4",
+        "/features/powering-your-workflow/secure-deal-workspace.png",
       ),
       I(
         "Project Email Inbox",
         "Give every deal an inbox so no insight goes missing.",
-        "project-email-inbox.png (from the AgenticPM site)",
+        "project-email-inbox.mp4",
         [
           "Dedicated email address per project",
           "Emails and attachments auto-filed into deal context",
           "Meeting notes captured alongside documents",
           "Everything searchable inside the workspace",
         ],
+        "/videos/features/powering-your-workflow/project-email-inbox.mp4",
+        "/features/powering-your-workflow/project-email-inbox.png",
       ),
       I(
         "Connectors",
         "Bring deal data in from where it already lives.",
-        "Connectors screen recording",
+        "connectors.mp4",
         [
-          "Files: PDF, PowerPoint, Word, Excel",
-          "Email: Outlook and Gmail",
-          "Meetings: Google Meet, Teams, Zoom",
-          "Web: Tavily, Google, DuckDuckGo, Bing",
+          "Connect the systems you already trust: CRM, market-data providers, email and cloud drives",
+          "Sync automatically: data lands in the deal and stays current — no re-exports",
+          "Enrich as you go: connected data feeds your files, datasets and analysis",
+          "Act in place: draft outreach and update records without leaving the platform",
         ],
+        "/videos/features/powering-your-workflow/connectors.mp4",
+        "/features/powering-your-workflow/connectors.png",
       ),
       I(
         "Datasets",
         "Third-party data and your own data in one workspace.",
-        "Datasets screen recording",
+        "datasets.mp4",
         [
-          "Preqin, FactSet, S&P Capital IQ",
-          "Crunchbase, AlphaSense",
-          "Your firm’s own benchmarks",
-          "Your firm’s value drivers",
+          "Ingests exports from CRM, market-data providers and databases as structured data",
+          "Query thousands of rows without loading the whole file into every task",
+          "Filter, aggregate and slice across the whole table",
+          "Reuse datasets across analyses and deals",
         ],
+        "/videos/features/powering-your-workflow/datasets.mp4",
+        "/features/powering-your-workflow/datasets.png",
       ),
       I(
         "Office Templates (Branded)",
         "Every output in your firm’s own formats.",
-        "Follows your Template GIF",
+        "office-templates-branded.mp4",
         [
-          "Memos and decks follow your firm’s templates",
-          "Export to PowerPoint, Word and Excel",
-          "Excel cells stay live formulas",
-          "Learns your team’s style and preferences",
+          "Analysis to a shipped document in seconds, not an evening",
+          "Rendered in your firm's own template — fonts, colours, logos, layout",
+          "Covers the full set: IC memos, deal decks, board packs, 100-day plans",
+          "No copy-paste or reformatting — IC-ready as it lands",
         ],
+        "/videos/features/powering-your-workflow/office-templates-branded.mp4",
+        "/features/powering-your-workflow/office-templates-branded.png",
       ),
-      I("App Types", "[APP TYPES DESCRIPTION TO CONFIRM]", "App Types screen recording", [
-        "[Point 1 to confirm]",
-        "[Point 2 to confirm]",
-        "[Point 3 to confirm]",
-        "[Point 4 to confirm]",
-      ]),
+      I(
+        "App Types",
+        "The right interface for every task — not one tool forced to do everything.",
+        "app-types.mp4",
+        [
+          "Report for structured, decision-ready analysis",
+          "Artifact for polished, infographic deliverables, with Chat for grounded Q&A",
+          "List Builder to build and enrich any structured grid, row by row",
+          "Dashboard for live, always-current views of the metrics that matter",
+        ],
+        "/videos/features/powering-your-workflow/app-types.mp4",
+        "/features/powering-your-workflow/app-types.png",
+      ),
       I(
         "Collaborate with Advisors",
         "One shared space for the deal team and its advisors.",
-        "Advisor’s Space screen recording",
+        "collaborate-with-advisors.png",
         [
-          "Shared project workspace with advisors",
-          "Early access to diligence reports",
-          "Comments and sign-off on each section",
-          "Recent tasks visible to the whole team",
+          "Invite advisors and third parties into the workspace",
+          "Granular, permission-based access to only what they need",
+          "Shared context so everyone works from the same facts",
+          "Confidential materials stay governed throughout",
         ],
+        undefined,
+        "/features/powering-your-workflow/collaborate-with-advisors.png",
       ),
     ],
   },
   {
     name: "Your Firm’s Decision Engine",
     items: [
-      I("Deal DNA", "One set of core facts, verified by your team.", "deal-dna GIF", [
-        "Deal, thesis fit, key financials, deal terms",
-        "Customers, market, management team",
-        "Every memo, model and deck uses the same numbers",
-        "Your team verifies each fact",
-      ]),
       I(
-        "Scored against your IC",
-        "Each opportunity scored against your firm’s past IC decisions.",
-        "Scores Opportunity GIF",
+        "AI File Intelligence",
+        "Understand the whole data room, and what to trust, before you open a file.",
+        "ai-file-intelligence.mp4",
         [
-          "Hypothesis Validation Score",
-          "Hypothesis heatmap",
-          "Built from your own committee’s decisions",
+          "Instant AI summaries — know what's in every file without opening it",
+          "Auto-detected document type, source and authoring context",
+          "A reliability rating on every file — how far to trust each source before citing it",
+          "Works across the entire room, however messy the upload",
         ],
+        "/videos/features/decision-engine/ai-file-intelligence.mp4",
+        "/features/decision-engine/ai-file-intelligence.png",
       ),
       I(
-        "Your question tree",
-        "A custom tree of questions for every memo.",
-        "IC Memo builder recording",
+        "Knowledge Agents",
+        "Put your firm's own knowledge to work on every deal.",
+        "knowledge-agents.mp4",
         [
-          "Sections, then topics and central questions",
-          "Follows your firm’s templates and style",
-          "Learns your team’s preferences",
+          "Analysis built from your thesis, playbooks, past IC memos and valuation benchmarks",
+          "Captures what lives in your team's heads and files — made queryable",
+          "Reasons like your firm, not a generic model",
+          "Your knowledge stays in your walls — never leaves, never trains others",
         ],
+        "/videos/features/decision-engine/knowledge-agents.mp4",
+        "/features/decision-engine/knowledge-agents.png",
       ),
-      I("Thesis validation", "The thesis is tested throughout the deal.", "Red Flag Analysis GIF", [
-        "Fact-checks any data point across documents, formats and sources",
-        "Red flag analysis",
-        "Financial red flags",
-      ]),
+      I(
+        "Templates per App Type",
+        "Your firm's decision logic built into every task.",
+        "templates-per-app-type.mp4",
+        [
+          "Pre-built templates for each use case",
+          "Your investment criteria and decision rules embedded in the task",
+          "Consistent output structure across the team",
+          "Set up once, applied every time",
+        ],
+        "/videos/features/decision-engine/templates-per-app-type.mp4",
+        "/features/decision-engine/templates-per-app-type.png",
+      ),
+      I(
+        "Custom Tools",
+        "Build a tool for your exact use case.",
+        "custom-tools.mp4",
+        [
+          "Ready-made PE research engines: company discovery, people discovery, M&A/deal search",
+          "Bespoke tools when nothing off-the-shelf fits (e.g. a management-profile builder)",
+          "Encodes your firm's logic so output comes back the way you expect",
+          "Kill the manual, repetitive work that eats analyst hours",
+        ],
+        "/videos/features/decision-engine/custom-tools.mp4",
+        "/features/decision-engine/custom-tools.png",
+      ),
     ],
   },
   {
     name: "Quality of Response, at the Right Cost",
     items: [
-      I("Every figure sourced", "Each number links back to its document.", "every analysis GIF", [
-        "Inline reference icons on every number",
-        "Links back to the source document",
-        "Intelligent highlighting in the source",
-      ]),
-      I("QA Bot", "Work is reviewed before it goes out.", "QA Bot screenshot", [
-        "Findings by severity: High, Medium, Low",
-        "Type, topic, finding and resolution",
-        "Suggested next step for each finding",
-      ]),
       I(
-        "Source-conflict resolution",
-        "When sources disagree, it shows which one holds.",
-        "Source-conflict screen recording",
-        ["Document reliability scoring", "Trusted websites", "Ontology across deal facts"],
+        "Deal DNA / Ontology",
+        "Extract core facts once, lock them, feed everything downstream.",
+        "deal-dna-ontology.mp4",
+        [
+          "Automated extraction of the deal's core facts",
+          "Human review before anything is locked",
+          "One verified source of truth per deal",
+          "Locked facts power every downstream analysis",
+        ],
+        "/videos/features/quality-of-response/deal-dna-ontology.mp4",
+        "/features/quality-of-response/deal-dna-ontology.png",
       ),
-      I("Live Excel formulas", "Models stay editable and auditable.", "Excel output recording", [
-        "No pasted values",
-        "Every cell traceable",
-        "Traceable logic behind each conclusion",
-      ]),
+      I(
+        "Tree-of-Questions Report Engine",
+        "A custom tree of questions for every memo.",
+        "tree-of-questions-report-engine.mp4",
+        [
+          "Sections, then topics and central questions",
+          "Follows your firm’s templates and style",
+          "Learns your team’s preferences",
+          "Auditable trail of answers back to source materials",
+        ],
+        "/videos/features/quality-of-response/tree-of-questions-report-engine.mp4",
+        "/features/quality-of-response/tree-of-questions-report-engine.png",
+      ),
+      I(
+        "QA Bot",
+        "Work is reviewed before it goes out.",
+        "qa-bot.mp4",
+        [
+          "Findings by severity: High, Medium, Low",
+          "Type, topic, finding and resolution",
+          "Suggested next step for each finding",
+          "Automated cross-document consistency checks",
+        ],
+        "/videos/features/quality-of-response/qa-bot.mp4",
+        "/features/quality-of-response/qa-bot.png",
+      ),
+      I(
+        "Inline Reference / Source Fact-Check",
+        "Each number links back to its document.",
+        "inline-reference-fact-check.mp4",
+        [
+          "Inline reference icons on every number",
+          "Links back to the source document",
+          "Intelligent highlighting in the source",
+          "Confidence scoring on extracted metrics",
+        ],
+        "/videos/features/quality-of-response/inline-reference-fact-check.mp4",
+        "/features/quality-of-response/inline-reference-fact-check.png",
+      ),
+      I(
+        "Cost Management",
+        "Optimize response speed and cost per query.",
+        "cost-management.mp4",
+        [
+          "Smart model routing based on task complexity",
+          "Real-time token and budget tracking",
+          "Cost allocation by project and workstream",
+          "Maximum efficiency without sacrificing accuracy",
+        ],
+        "/videos/features/quality-of-response/cost-management.mp4",
+        "/features/quality-of-response/cost-management.png",
+      ),
     ],
   },
 ];
