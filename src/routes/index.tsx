@@ -1,7 +1,54 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
+import {
+  LayoutDashboard,
+  Mail,
+  Unplug,
+  Table,
+  FileText,
+  BookOpenText,
+  Users,
+  FileSearch,
+  Bot,
+  Layers,
+  Wrench,
+  Dna,
+  GitFork,
+  ShieldCheck,
+  Link2,
+  DollarSign,
+  Clock,
+  Check as LucideCheck,
+} from "lucide-react";
 import logo from "@/assets/agenticpm-logo.png";
 import { TEAMS, CFG, QUOTES } from "@/lib/content";
+
+const FEATURE_ICONS: Record<string, typeof LayoutDashboard> = {
+  "Secure Deal Workspace": LayoutDashboard,
+  "Project Email Inbox": Mail,
+  Connectors: Unplug,
+  Datasets: Table,
+  "Office Templates (Branded)": FileText,
+  "App Types": BookOpenText,
+  "Collaborate with Advisors": Users,
+  "AI File Intelligence": FileSearch,
+  "Knowledge Agents": Bot,
+  "Templates per App Type": Layers,
+  "Custom Tools": Wrench,
+  "Deal DNA / Ontology": Dna,
+  "Tree-of-Questions Report Engine": GitFork,
+  "QA Bot": ShieldCheck,
+  "Inline Reference / Source Fact-Check": Link2,
+  "Cost Management": DollarSign,
+  "Claude Plug-In": Bot,
+};
+
+const FEATURE_CUES: Record<string, number[]> = {
+  "Secure Deal Workspace": [0, 7, 14, 26],
+  "Project Email Inbox": [2, 12, 20, 26],
+  "App Types": [3, 16, 36, 64],
+  "Inline Reference / Source Fact-Check": [3, 10, 27, 32],
+};
 
 const DEMO = "https://www.agenticprivatemarkets.ai/schedule-demo";
 
@@ -422,93 +469,184 @@ function Platform() {
   const [tab, setTab] = useState(0);
   const [item, setItem] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [activeBullet, setActiveBullet] = useState(0);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
   const items = CFG[tab]!.items;
-  useEffect(() => {
-    if (paused) return;
-    const t = setInterval(() => setItem((i) => (i + 1) % items.length), 6000);
-    return () => clearInterval(t);
-  }, [paused, items.length, tab]);
   const active = items[item] ?? items[0]!;
 
+  const handleTabChange = (i: number) => {
+    setTab(i);
+    setItem(0);
+    setActiveBullet(0);
+    setPaused(false);
+  };
+
+  const handleItemChange = (i: number) => {
+    setItem(i);
+    setActiveBullet(0);
+    setPaused(true);
+  };
+
+  useEffect(() => {
+    if (paused) return;
+    const t = setInterval(() => {
+      setItem((i) => {
+        const next = (i + 1) % items.length;
+        setActiveBullet(0);
+        return next;
+      });
+    }, 6000);
+    return () => clearInterval(t);
+  }, [paused, items.length, tab]);
+
+  const handleTimeUpdate = () => {
+    if (!videoRef.current) return;
+    const ct = videoRef.current.currentTime;
+    const cues = FEATURE_CUES[active.t] || [0, 5, 10, 15];
+    let idx = 0;
+    for (let i = cues.length - 1; i >= 0; i--) {
+      if (ct >= cues[i]!) {
+        idx = i;
+        break;
+      }
+    }
+    setActiveBullet(idx);
+  };
+
+  const handleBulletClick = (idx: number) => {
+    setActiveBullet(idx);
+    if (videoRef.current) {
+      const cues = FEATURE_CUES[active.t] || [0, 5, 10, 15];
+      const targetTime = cues[idx] ?? 0;
+      videoRef.current.currentTime = targetTime;
+      videoRef.current.play().catch(() => {});
+    }
+  };
+
   return (
-    <div id="platform" className="border-t border-border bg-card">
-      <div className="mx-auto flex max-w-[1200px] flex-col gap-8 px-6 py-24">
+    <div id="platform" className="border-t border-border bg-white">
+      <div className="mx-auto flex max-w-[1536px] flex-col gap-8 px-4 py-16 sm:px-8 sm:py-20 xl:px-10 xl:py-24 2xl:px-16">
         <div className="rv flex max-w-[760px] flex-col gap-3">
           <span className="label-caps text-[13px] text-primary">The platform</span>
-          <h2 className="text-[clamp(30px,3.6vw,44px)] font-extrabold leading-[1.12] tracking-[-0.025em]">
+          <h2 className="text-[clamp(28px,3.4vw,42px)] font-extrabold leading-[1.12] tracking-[-0.025em] text-[#1d293d]">
             Configured to your thesis and workflows.
           </h2>
-          <p className="text-[17px] leading-[1.6] text-body">
+          <p className="text-[16px] leading-[1.6] text-[#62748e]">
             AgenticPM isn’t a generic chatbot. It absorbs how your firm invests, writes and decides,
             then operates inside your standards.
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
-          {CFG.map((tb, i) => (
-            <button
-              key={tb.name}
-              type="button"
-              onClick={() => {
-                setTab(i);
-                setItem(0);
-                setPaused(false);
-              }}
-              className={`min-h-11 rounded-full border px-5 py-2.5 text-[15px] font-semibold transition-colors ${tab === i ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-body"}`}
-            >
-              {tb.name}
-            </button>
-          ))}
+
+        {/* Tab categories */}
+        <div
+          role="tablist"
+          aria-label="Feature categories"
+          className="-mx-4 flex flex-nowrap items-center gap-2.5 overflow-x-auto px-4 pb-1 sm:mx-0 sm:overflow-visible sm:px-0 xl:flex-wrap"
+        >
+          {CFG.map((tb, i) => {
+            const isSelected = tab === i;
+            return (
+              <button
+                key={tb.name}
+                type="button"
+                role="tab"
+                aria-selected={isSelected}
+                onClick={() => handleTabChange(i)}
+                className={`relative h-10 shrink-0 whitespace-nowrap rounded-full border px-6 text-[14.5px] font-medium transition-all ${
+                  isSelected
+                    ? "border-[#0045d1] text-white font-bold shadow-[0px_6px_16px_-8px_rgba(0,69,209,0.6)]"
+                    : "border-[#e2e8f0] bg-white text-[#314158] hover:border-[#cad5e2] hover:bg-[#f8fafc]"
+                }`}
+                style={
+                  isSelected
+                    ? {
+                        background: "linear-gradient(90deg, #0045D1 35.817%, #00236B 98.675%)",
+                      }
+                    : undefined
+                }
+              >
+                {tb.name}
+              </button>
+            );
+          })}
         </div>
-        <div className="flex flex-wrap items-stretch gap-5">
-          <div className="flex min-w-0 flex-[1_1_280px] flex-col gap-1">
+
+        {/* 3-Column Layout: Left Feature List | Center Video | Right Checkpoints */}
+        <div className="mt-4 grid grid-cols-1 items-center gap-6 xl:grid-cols-[330px_1fr_300px]">
+          {/* Left Column: Feature Items */}
+          <div
+            aria-label={`${CFG[tab]?.name} features`}
+            className="flex w-full flex-col items-start gap-1.5 xl:self-start xl:border-r xl:border-[#cad5e2]/80 xl:pr-5"
+          >
             {items.map((it, i) => {
               const on = i === item;
+              const Icon = FEATURE_ICONS[it.t] || LayoutDashboard;
+
+              if (on) {
+                return (
+                  <button
+                    key={`${tab}-${it.t}`}
+                    type="button"
+                    aria-current="true"
+                    onClick={() => handleItemChange(i)}
+                    className="flex w-full items-start gap-3 rounded-[8px] border border-[#cad5e2] bg-white p-3 text-left shadow-[0px_4px_10px_rgba(71,71,71,0.06)]"
+                  >
+                    <span
+                      style={{
+                        background: "linear-gradient(90deg, #0045D1 35.817%, #00236B 98.675%)",
+                      }}
+                      className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[6px] text-white shadow-sm"
+                    >
+                      <Icon className="h-4 w-4" />
+                    </span>
+                    <span className="flex min-w-0 flex-1 flex-col gap-1">
+                      <span className="text-[14px] font-semibold leading-tight text-[#0045d1]">
+                        {it.t}
+                      </span>
+                      <span className="text-[12.5px] leading-snug text-[#45556c]">{it.d}</span>
+                      <span className="mt-1 block h-[3px] w-full overflow-hidden rounded-full bg-[#e2e8f0]">
+                        <span
+                          key={`${tab}-${item}-${paused}`}
+                          style={{
+                            background: "linear-gradient(90deg, #0045D1 35.817%, #00236B 98.675%)",
+                          }}
+                          className={`block h-full ${paused ? "w-full" : "bar"}`}
+                        />
+                      </span>
+                    </span>
+                  </button>
+                );
+              }
+
               return (
                 <button
                   key={`${tab}-${it.t}`}
                   type="button"
-                  onClick={() => {
-                    setItem(i);
-                    setPaused(true);
-                  }}
-                  className={`block min-h-11 w-full rounded-[14px] border px-4 py-3.5 text-left transition-colors ${on ? "border-border bg-card shadow-[var(--shadow-soft)]" : "border-transparent bg-transparent"}`}
+                  aria-current="false"
+                  onClick={() => handleItemChange(i)}
+                  className="group flex w-full items-center gap-3 rounded-[6px] px-2.5 py-2 text-left transition-colors hover:bg-[#f8fafc]"
                 >
-                  <span className="flex items-center gap-3">
-                    <span
-                      className={`label-caps flex h-8 w-8 flex-none items-center justify-center rounded-lg text-xs tracking-normal ${on ? "bg-primary text-primary-foreground" : "bg-primary-soft text-primary"}`}
-                    >
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span
-                      className={`text-base ${on ? "font-bold text-primary" : "font-medium text-body"}`}
-                    >
-                      {it.t}
-                    </span>
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[6px] bg-[#f1f5f9] text-[#45556c] transition-colors group-hover:bg-[#e2e8f0]">
+                    <Icon className="h-4 w-4" />
                   </span>
-                  {on && (
-                    <>
-                      <span className="up block pl-11 pt-2 text-sm leading-[1.5] text-body">
-                        {it.d}
-                      </span>
-                      <span className="ml-11 mt-3 block h-[3px] overflow-hidden rounded-[3px] bg-border">
-                        <span
-                          key={`${tab}-${item}-${paused}`}
-                          className={`block h-[3px] bg-primary ${paused ? "w-full" : "bar"}`}
-                        />
-                      </span>
-                    </>
-                  )}
+                  <span className="min-w-0 flex-1 text-[13.5px] font-medium text-[#314158] transition-colors group-hover:text-[#0045d1]">
+                    {it.t}
+                  </span>
                 </button>
               );
             })}
           </div>
+
+          {/* Center Column: Video Player */}
           <div
             key={`m-${tab}-${item}`}
-            className="up min-w-0 flex-[2_1_460px] rounded-[18px] border border-border bg-card p-2.5 shadow-[var(--shadow-frame)]"
+            className="flex w-full flex-col rounded-[16px] border border-[#e2e8f0] bg-[#f8fafc] p-2.5 shadow-sm"
           >
-            <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[14px] bg-[#f8fafc]">
+            <div className="relative aspect-[828/419] w-full overflow-hidden rounded-[10px] border border-[#e2e8f0] bg-white">
               {active.video ? (
                 <video
+                  ref={videoRef}
                   key={active.video}
                   src={active.video}
                   poster={active.image}
@@ -519,6 +657,7 @@ function Platform() {
                   playsInline
                   controls
                   preload="metadata"
+                  onTimeUpdate={handleTimeUpdate}
                   className="h-full w-full object-cover object-top"
                 />
               ) : active.image ? (
@@ -529,7 +668,7 @@ function Platform() {
                 />
               ) : (
                 <div className="flex h-full min-h-80 flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-primary-line bg-primary-soft p-6 text-center">
-                  <span className="label-caps text-xs text-primary">Video / GIF</span>
+                  <span className="label-caps text-xs text-primary">Preview</span>
                   <span className="text-xl font-bold">{active.t}</span>
                   <span className="max-w-[340px] text-[13px] text-muted-foreground">
                     {active.media}
@@ -538,21 +677,48 @@ function Platform() {
               )}
             </div>
           </div>
+
+          {/* Right Column: Checkpoints */}
           <div
             key={`b-${tab}-${item}`}
-            className="up flex min-w-0 flex-[1_1_240px] flex-col gap-2.5"
+            className="grid w-full grid-cols-1 gap-2 sm:grid-cols-2 xl:flex xl:w-[300px] xl:shrink-0 xl:flex-col xl:gap-2"
           >
-            {active.bullets.map((b) => (
-              <div
-                key={b}
-                className="flex flex-1 items-start gap-3 rounded-[14px] border border-border bg-background p-4"
-              >
-                <span className="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-primary-soft text-primary">
-                  <Check />
-                </span>
-                <span className="text-sm leading-[1.5]">{b}</span>
-              </div>
-            ))}
+            {active.bullets.map((b, i) => {
+              const isDone = i <= activeBullet;
+              return (
+                <button
+                  key={b}
+                  type="button"
+                  onClick={() => handleBulletClick(i)}
+                  className={`flex w-full items-start gap-2.5 rounded-[8px] p-2.5 text-left transition-all ${
+                    isDone
+                      ? "border border-[#bbf7d0] bg-[#f0fdf4] shadow-sm"
+                      : "border border-[#e2e8f0] bg-white shadow-sm hover:border-slate-300"
+                  }`}
+                >
+                  <span
+                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-0.5 transition-colors ${
+                      isDone
+                        ? "border border-[#86efac] bg-white text-[#16a34a]"
+                        : "border border-slate-300 bg-white text-[#94a3b8]"
+                    }`}
+                  >
+                    {isDone ? (
+                      <LucideCheck className="h-3 w-3 stroke-[2.5]" />
+                    ) : (
+                      <Clock className="h-3 w-3 stroke-[2]" />
+                    )}
+                  </span>
+                  <span
+                    className={`text-[12.5px] leading-[1.5] ${
+                      isDone ? "font-medium text-[#15803d]" : "text-[#475569]"
+                    }`}
+                  >
+                    {b}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>

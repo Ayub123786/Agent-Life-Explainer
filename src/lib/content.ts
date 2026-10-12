@@ -102,7 +102,7 @@ export const CFG = [
       ),
       I(
         "Connectors",
-        "Bring deal data in from where it already lives.",
+        "Plug your sources in once and let data flow through the whole deal.",
         "connectors.mp4",
         [
           "Connect the systems you already trust: CRM, market-data providers, email and cloud drives",
@@ -115,7 +115,7 @@ export const CFG = [
       ),
       I(
         "Datasets",
-        "Third-party data and your own data in one workspace.",
+        "Big exports, handled as data — not a file the tool struggles to read.",
         "datasets.mp4",
         [
           "Ingests exports from CRM, market-data providers and databases as structured data",
@@ -128,7 +128,7 @@ export const CFG = [
       ),
       I(
         "Office Templates (Branded)",
-        "Every output in your firm’s own formats.",
+        "House-style Word, Excel and PowerPoint — IC-ready in one click.",
         "office-templates-branded.mp4",
         [
           "Analysis to a shipped document in seconds, not an evening",
@@ -154,7 +154,7 @@ export const CFG = [
       ),
       I(
         "Collaborate with Advisors",
-        "One shared space for the deal team and its advisors.",
+        "Bring external advisors into the deal — with exactly the right access.",
         "collaborate-with-advisors.png",
         [
           "Invite advisors and third parties into the workspace",
@@ -242,52 +242,52 @@ export const CFG = [
       ),
       I(
         "Tree-of-Questions Report Engine",
-        "A custom tree of questions for every memo.",
+        "Run repeatable, decision-ready analysis from a question tree.",
         "tree-of-questions-report-engine.mp4",
         [
-          "Sections, then topics and central questions",
-          "Follows your firm’s templates and style",
-          "Learns your team’s preferences",
-          "Auditable trail of answers back to source materials",
+          "Pre-configured templates you set up once and reuse",
+          "Feeder-question tree drives deep, structured extraction",
+          "AI consolidates outputs into one decision-ready summary",
+          "Drill down to any answer or source document on demand",
         ],
         "/videos/features/quality-of-response/tree-of-questions-report-engine.mp4",
         "/features/quality-of-response/tree-of-questions-report-engine.png",
       ),
       I(
         "QA Bot",
-        "Work is reviewed before it goes out.",
+        "A check on every task that flags conflicts before they reach IC.",
         "qa-bot.mp4",
         [
-          "Findings by severity: High, Medium, Low",
-          "Type, topic, finding and resolution",
-          "Suggested next step for each finding",
-          "Automated cross-document consistency checks",
+          "Runs on every report and chat, automatically",
+          "Flags data mismatches, inconsistencies and reconciliation gaps",
+          "Shows exactly which sources disagree",
+          "Resolve discrepancies before anything ships",
         ],
         "/videos/features/quality-of-response/qa-bot.mp4",
         "/features/quality-of-response/qa-bot.png",
       ),
       I(
         "Inline Reference / Source Fact-Check",
-        "Each number links back to its document.",
+        "Every figure traces back to the exact source it came from.",
         "inline-reference-fact-check.mp4",
         [
-          "Inline reference icons on every number",
-          "Links back to the source document",
-          "Intelligent highlighting in the source",
-          "Confidence scoring on extracted metrics",
+          "Open the exact source in one click",
+          "Paragraph-level traceability back to source PDFs",
+          "Cell-level traceability on every output figure",
+          "No black-box math — audit-ready for diligence and IC",
         ],
         "/videos/features/quality-of-response/inline-reference-fact-check.mp4",
         "/features/quality-of-response/inline-reference-fact-check.png",
       ),
       I(
         "Cost Management",
-        "Optimize response speed and cost per query.",
+        "See what every task and analysis costs.",
         "cost-management.mp4",
         [
-          "Smart model routing based on task complexity",
-          "Real-time token and budget tracking",
-          "Cost allocation by project and workstream",
-          "Maximum efficiency without sacrificing accuracy",
+          "Visibility into usage and spend across deals and teams",
+          "The cost of each analysis, visible as you work",
+          "Spot the tasks and analyses worth optimizing",
+          "Always know where spend is going — no surprises",
         ],
         "/videos/features/quality-of-response/cost-management.mp4",
         "/features/quality-of-response/cost-management.png",
