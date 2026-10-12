@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import logo from "@/assets/agenticpm-logo.png";
 import { TEAMS, CFG, QUOTES } from "@/lib/content";
 
@@ -147,12 +147,45 @@ function Hero() {
             ))}
           </div>
         </div>
-        <div className="up mt-7 w-full rounded-[22px] border border-border bg-card p-2.5 shadow-[var(--shadow-frame)]">
-          <div className="relative flex aspect-video flex-col items-center justify-center gap-4 overflow-hidden rounded-[14px] bg-ink p-6">
+        <HeroVideo />
+      </div>
+    </div>
+  );
+}
+
+function HeroVideo() {
+  const [hasStarted, setHasStarted] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const startVideo = () => {
+    setHasStarted(true);
+    if (videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+  };
+
+  return (
+    <div className="up mt-7 w-full rounded-[22px] border border-border bg-card p-2.5 shadow-[var(--shadow-frame)]">
+      <div className="relative aspect-video w-full overflow-hidden rounded-[14px] bg-black">
+        <video
+          ref={videoRef}
+          src="/demo-video.mp4"
+          poster="/demo-poster.jpg"
+          controls={hasStarted}
+          playsInline
+          preload="metadata"
+          className="h-full w-full object-contain"
+          onEnded={() => setHasStarted(false)}
+        />
+        {!hasStarted && (
+          <div
+            onClick={startVideo}
+            className="group absolute inset-0 flex cursor-pointer flex-col items-center justify-center gap-4 bg-ink/65 backdrop-blur-[2px] transition-all hover:bg-ink/50"
+          >
             <button
               type="button"
               aria-label="Play the product demo"
-              className="flex h-[84px] w-[84px] items-center justify-center rounded-full bg-card text-primary shadow-[0_0_0_12px_color-mix(in_oklab,var(--card)_12%,transparent)]"
+              className="flex h-[84px] w-[84px] items-center justify-center rounded-full bg-card text-primary shadow-[0_0_0_12px_color-mix(in_oklab,var(--card)_12%,transparent)] transition-transform duration-300 group-hover:scale-110 active:scale-95"
             >
               <svg
                 width="30"
@@ -160,18 +193,19 @@ function Hero() {
                 viewBox="0 0 24 24"
                 fill="currentColor"
                 aria-hidden="true"
+                className="translate-x-0.5"
               >
                 <path d="M8 5v14l11-7z" />
               </svg>
             </button>
-            <span className="text-lg font-bold text-primary-foreground">
+            <span className="text-lg font-bold text-primary-foreground drop-shadow-sm transition-colors group-hover:text-primary-foreground/90">
               Watch the product demo
             </span>
             <span className="label-caps absolute bottom-4 left-5 text-[11px] text-primary-line">
               Demo video
             </span>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
