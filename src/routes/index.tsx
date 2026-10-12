@@ -465,12 +465,17 @@ function Problem() {
   );
 }
 
+const DURATION = 6000;
+
 function Platform() {
   const [tab, setTab] = useState(0);
   const [item, setItem] = useState(0);
-  const [paused, setPaused] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const [activeBullet, setActiveBullet] = useState(0);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const startTimeRef = useRef<number>(Date.now());
+  const remainingRef = useRef<number>(DURATION);
 
   const items = CFG[tab]!.items;
   const active = items[item] ?? items[0]!;
@@ -479,26 +484,47 @@ function Platform() {
     setTab(i);
     setItem(0);
     setActiveBullet(0);
-    setPaused(false);
+    remainingRef.current = DURATION;
+    startTimeRef.current = Date.now();
   };
 
   const handleItemChange = (i: number) => {
     setItem(i);
     setActiveBullet(0);
-    setPaused(true);
+    remainingRef.current = DURATION;
+    startTimeRef.current = Date.now();
   };
 
   useEffect(() => {
-    if (paused) return;
-    const t = setInterval(() => {
-      setItem((i) => {
-        const next = (i + 1) % items.length;
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+
+    if (isHovered) {
+      const elapsed = Date.now() - startTimeRef.current;
+      remainingRef.current = Math.max(0, remainingRef.current - elapsed);
+      return;
+    }
+
+    startTimeRef.current = Date.now();
+    timerRef.current = setTimeout(
+      () => {
+        setItem((prev) => (prev + 1) % items.length);
         setActiveBullet(0);
-        return next;
-      });
-    }, 6000);
-    return () => clearInterval(t);
-  }, [paused, items.length, tab]);
+        remainingRef.current = DURATION;
+        startTimeRef.current = Date.now();
+      },
+      Math.max(50, remainingRef.current),
+    );
+
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [tab, item, isHovered, items.length]);
 
   const handleTimeUpdate = () => {
     if (!videoRef.current) return;
@@ -607,11 +633,12 @@ function Platform() {
                       <span className="text-[12.5px] leading-snug text-[#45556c]">{it.d}</span>
                       <span className="mt-1 block h-[3px] w-full overflow-hidden rounded-full bg-[#e2e8f0]">
                         <span
-                          key={`${tab}-${item}-${paused}`}
+                          key={`${tab}-${item}`}
                           style={{
                             background: "linear-gradient(90deg, #0045D1 35.817%, #00236B 98.675%)",
+                            animationPlayState: isHovered ? "paused" : "running",
                           }}
-                          className={`block h-full ${paused ? "w-full" : "bar"}`}
+                          className="block h-full bar"
                         />
                       </span>
                     </span>
@@ -641,6 +668,8 @@ function Platform() {
           {/* Center Column: Video Player */}
           <div
             key={`m-${tab}-${item}`}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
             className="flex w-full flex-col rounded-[16px] border border-[#e2e8f0] bg-[#f8fafc] p-2.5 shadow-sm"
           >
             <div className="relative aspect-[828/419] w-full overflow-hidden rounded-[10px] border border-[#e2e8f0] bg-white">
